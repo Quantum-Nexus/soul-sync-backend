@@ -26,6 +26,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    additionalDetails: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Profile",
+    },
+    gender: {
+      type: String,
+      enum: ["Male", "Female", "Other"],
+    },
 
     // courses: [
     //   {

@@ -3,8 +3,13 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const userRoutes = require("./routes/user")
 const database = require("./config/database")
+
+
+
+const userRoutes = require("./routes/user")
+const fetchingData = require("./routes/data")
+const contactus = require("./routes/contact")
 
 
 
@@ -21,6 +26,8 @@ app.use(
 )
 
 app.use("/api/v1/auth", userRoutes)
+app.use("/api/v1/fetch", fetchingData)
+app.use("/api/v1/", contactus)
 
 // Testing the server
 app.get("/", (req, res) => {
