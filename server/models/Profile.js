@@ -15,8 +15,13 @@ const profileSchema = new mongoose.Schema({
 	},
     heigh:{
         type: Number,
-    }
-    
+    },
+	instagramUsername: {
+		type: String,
+	},
+	graduationYear: {
+		type: Number,
+	}
 });
 
 // Export the Profile model
