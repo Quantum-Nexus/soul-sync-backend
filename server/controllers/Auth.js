@@ -12,7 +12,7 @@ exports.signup = async (req, res) => {
   try {
     // Destructure fields from the request body
     console.log("Hello");
-    const { firstName, lastName, email, password, confirmPassword, otp } =
+    const { firstName, lastName, email, password, confirmPassword, otp, about, instagramUsername, dateOfBirth, gender, graduationYear, height, contactNumber } =
       req.body;
     // Check if All Details are there or not
     if (
@@ -67,20 +67,27 @@ exports.signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create the Additional Profile For User
-    const profileDetails = await Profile.create({
-      dateOfBirth: null,
-      about: null,
-      contactNumber: null,
-      height: null,
-    })
+    // const profileDetails = await Profile.create({
+    //   dateOfBirth: null,
+    //   about: null,
+    //   contactNumber: null,
+    //   height: null,
+    // })
 
     const user = await User.create({
       firstName,
       lastName,
       email,
       password: hashedPassword,
-      additionalDetails: profileDetails._id,
+      // additionalDetails: profileDetails._id,
       image: "",
+      about,
+      dateOfBirth,
+      contactNumber,
+      height,
+      instagramUsername,
+      graduationYear,
+      gender
     });
 
     return res.status(200).json({
