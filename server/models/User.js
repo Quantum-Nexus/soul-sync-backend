@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
       type: Number,
       trim: true,
     },
-    heigh: {
+    height: {
       type: Number,
     },
     instagramUsername: {
