@@ -20,7 +20,6 @@ exports.signup = async (req, res) => {
       !lastName ||
       !email ||
       !password ||
-      !confirmPassword ||
       !otp
     ) {
       return res.status(403).send({
