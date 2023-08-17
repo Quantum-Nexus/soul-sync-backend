@@ -1,5 +1,4 @@
-
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
@@ -26,9 +25,29 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    additionalDetails: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Profile",
+    // additionalDetails: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Profile",
+    // },
+    dateOfBirth: {
+      type: String,
+    },
+    about: {
+      type: String,
+      trim: true,
+    },
+    contactNumber: {
+      type: Number,
+      trim: true,
+    },
+    heigh: {
+      type: Number,
+    },
+    instagramUsername: {
+      type: String,
+    },
+    graduationYear: {
+      type: Number,
     },
     gender: {
       type: String,
@@ -50,9 +69,8 @@ const userSchema = new mongoose.Schema(
     image: {
       type: String,
     },
-
   },
   { timestamps: true }
-)
+);
 
-module.exports = mongoose.model("user", userSchema)
+module.exports = mongoose.model("user", userSchema);
