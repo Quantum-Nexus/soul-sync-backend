@@ -4,6 +4,8 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const database = require("./config/database")
+const { cloudinaryConnect } = require("./config/cloudinary")
+
 
 
 
@@ -15,6 +17,7 @@ const contactus = require("./routes/contact")
 
 const PORT = process.env.PORT || 4000;
 database.connect()
+cloudinaryConnect()
 
 app.use(express.json())
 app.use(cookieParser())
