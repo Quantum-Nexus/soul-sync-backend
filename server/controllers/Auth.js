@@ -4,14 +4,15 @@ const OTP = require("../models/OTP");
 const jwt = require("jsonwebtoken");
 const otpGenerator = require("otp-generator");
 const mailSender = require("../utils/mailSender");
-const Profile = require("../models/Profile")
+const Profile = require("../models/Profile");
+const { uploadImageToCloudinary } = require("../utils/imageUploader");
 require("dotenv").config()
 
 
 exports.signup = async (req, res) => {
   try {
     // Destructure fields from the request body
-    console.log("Hello");
+
     const { firstName, lastName, email, password, confirmPassword, otp, about, instagramUsername, dateOfBirth, gender, graduationYear, height, contactNumber } =
       req.body;
     // Check if All Details are there or not
@@ -36,6 +37,7 @@ exports.signup = async (req, res) => {
           "Password and Confirm Password do not match. Please try again.",
       });
     }
+    
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -45,10 +47,13 @@ exports.signup = async (req, res) => {
         message: "User already exists. Please sign in to continue.",
       });
     }
+    
 
     // Find the most recent OTP for the email
     const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
+
     console.log(response);
+
     if (response.length === 0) {
       // OTP not found for the email
       return res.status(400).json({
@@ -62,6 +67,7 @@ exports.signup = async (req, res) => {
         message: "The OTP is not valid",
       });
     }
+    
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -74,13 +80,23 @@ exports.signup = async (req, res) => {
     //   height: null,
     // })
 
+    const displayPicture = req.files.displayPicture;
+    const img = await uploadImageToCloudinary(
+      displayPicture,
+      process.env.FOLDER_NAME,
+      1000,
+      1000
+    )
+
+    
+
     const user = await User.create({
       firstName,
       lastName,
       email,
       password: hashedPassword,
       // additionalDetails: profileDetails._id,
-      image: "",
+      image : img.secure_url,
       about,
       dateOfBirth,
       contactNumber,
