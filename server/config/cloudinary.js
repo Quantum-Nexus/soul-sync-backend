@@ -8,7 +8,7 @@ exports.cloudinaryConnect = () => {
 			api_key: process.env.API_KEY,
 			api_secret: process.env.API_SECRET,
 		});
-        console.log("Cloudinary successfully")
+        console.log("cloudinary successfully connected")
 	} catch (error) {
 		console.log(error);
 	}
