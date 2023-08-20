@@ -21,7 +21,7 @@ exports.signup = async (req, res) => {
       console.log("files ko console kra rha hu")
       console.log(req.files);
 
-      const pic = req.files.undefined
+      const pic = req.files.pic;
       const img = await uploadImageToCloudinary(
         pic,
         process.env.FOLDER_NAME,
@@ -29,7 +29,7 @@ exports.signup = async (req, res) => {
         1000
       )
       console.log(img)
-    
+      return;
 
     // Check if All Details are there or not
     if (
