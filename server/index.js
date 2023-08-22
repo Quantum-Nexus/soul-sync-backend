@@ -10,7 +10,6 @@ const fileUpload = require("express-fileupload")
 
 
 
-
 const userRoutes = require("./routes/user")
 const fetchingData = require("./routes/data")
 const contactus = require("./routes/contact")

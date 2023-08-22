@@ -21,7 +21,7 @@ exports.signup = async (req, res) => {
       console.log("files ko console kra rha hu")
       console.log(req.files);
 
-      const pic = req.files.pic;
+      const pic = req.files.image;
       const img = await uploadImageToCloudinary(
         pic,
         process.env.FOLDER_NAME,
