@@ -29,7 +29,6 @@ exports.signup = async (req, res) => {
         1000
       )
       console.log(img)
-      return;
 
     // Check if All Details are there or not
     if (
