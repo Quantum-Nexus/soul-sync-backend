@@ -16,10 +16,12 @@ exports.fetchallusers = async (req, res) => {
 exports.addconnection = async (req, res) => {
   try {
     console.log("Add conntection");
-    const id = req.user.id;
-    console.log(id);
+    console.log( "Printing req ka user" + req.user);
+    const id = req.user.id; //user id
+    console.log( "Printing req ka user ka id" +  id);
 
     const userconnect = req.body;
+    console.log("printing req ka body" + userconnect);
     const connection_id = userconnect._id;
     console.log(connection_id);
 
