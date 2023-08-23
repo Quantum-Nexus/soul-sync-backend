@@ -6,29 +6,41 @@ const otpGenerator = require("otp-generator");
 const mailSender = require("../utils/mailSender");
 const Profile = require("../models/Profile");
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
-require("dotenv").config()
-
+require("dotenv").config();
 
 exports.signup = async (req, res) => {
   try {
     // Destructure fields from the request body
     // console.log(req.files);
-    
+
     // console.log(img)
-    const { firstName, lastName, email, password, confirmPassword, otp, about, instagramUsername, dateOfBirth, gender, graduationYear, height, contactNumber } =
-      req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      otp,
+      about,
+      instagramUsername,
+      dateOfBirth,
+      gender,
+      graduationYear,
+      height,
+      contactNumber,
+    } = req.body;
 
-      console.log("files ko console kra rha hu")
-      console.log(req.files);
+    console.log("files ko console kra rha hu");
+    console.log(req.files);
 
-      const pic = req.files.image;
-      const img = await uploadImageToCloudinary(
-        pic,
-        process.env.FOLDER_NAME,
-        1000,
-        1000
-      )
-      console.log(img)
+    const pic = req.files.image;
+    const img = await uploadImageToCloudinary(
+      pic,
+      process.env.FOLDER_NAME,
+      1000,
+      1000
+    );
+    console.log(img);
 
     // Check if All Details are there or not
     if (
@@ -90,8 +102,6 @@ exports.signup = async (req, res) => {
     //   height: null,
     // })
 
-    
-
     const user = await User.create({
       firstName,
       lastName,
@@ -105,8 +115,10 @@ exports.signup = async (req, res) => {
       height,
       instagramUsername,
       graduationYear,
-      gender
+      gender,
     });
+
+    console.log("user signed");
 
     return res.status(200).json({
       success: true,
@@ -217,6 +229,12 @@ exports.login = async (req, res) => {
         user,
         message: `User Login Success`,
       });
+
+      // const decode = jwt.verify(token, process.env.JWT_SECRET)
+      // req.user = decode
+
+      // console.log("decode ko console kiya hai");
+      // console.log(decode)
     } else {
       return res.status(401).json({
         success: false,
@@ -237,7 +255,12 @@ exports.login = async (req, res) => {
 exports.changePassword = async (req, res) => {
   try {
     // Get user data from req.user
+    console.log("Entered in change pass");
+    // const userDetails = await User.findById(req.user.id);
     const userDetails = await User.findById(req.user.id);
+    console.log("start");
+    console.log(userDetails);
+    console.log("end");
 
     // Get old password, new password, and confirm new password from req.body
     const { oldPassword, newPassword } = req.body;
@@ -247,6 +270,7 @@ exports.changePassword = async (req, res) => {
       oldPassword,
       userDetails.password
     );
+
     if (!isPasswordMatch) {
       // If old password does not match, return a 401 (Unauthorized) error
       return res
@@ -263,25 +287,26 @@ exports.changePassword = async (req, res) => {
     );
 
     // Send notification email
-    try {
-      const emailResponse = await mailSender(
-        updatedUserDetails.email,
-        "Password for your account has been updated",
-        passwordUpdated(
-          updatedUserDetails.email,
-          `Password updated successfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`
-        )
-      );
-      console.log("Email sent successfully:", emailResponse.response);
-    } catch (error) {
-      // If there's an error sending the email, log the error and return a 500 (Internal Server Error) error
-      console.error("Error occurred while sending email:", error);
-      return res.status(500).json({
-        success: false,
-        message: "Error occurred while sending email",
-        error: error.message,
-      });
-    }
+    // try {
+    //   console.log("starting to send mail");
+    //   await mailSender(
+    //     updatedUserDetails.email,
+    //     "Password for your account has been updated",
+    //     passwordUpdated(
+    //       updatedUserDetails.email,
+    //       `Password updated successfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`
+    //     )
+    //   );
+    //   console.log("All set");
+    // } catch (error) {
+    //   // If there's an error sending the email, log the error and return a 500 (Internal Server Error) error
+    //   console.error("Error occurred while sending email:", error);
+    //   return res.status(500).json({
+    //     success: false,
+    //     message: "Error occurred while sending email",
+    //     error: error.message,
+    //   });
+    // }
 
     // Return success response
     return res
