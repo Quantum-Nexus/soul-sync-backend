@@ -23,15 +23,21 @@ exports.addconnection = async (req, res) => {
     console.log("printnig myemail" + myemail);
     console.log("printing otheremail" + otheremail);
 
+    const loggedinuser = await User.findOne({ email: myemail });
+    const likeduser = await User.findOne({ email: otheremail });
+
+    console.log( "printing logged in user" +loggedinuser);
+    console.log("printing liked user" + likeduser);
+
     const followeduser = await User.findOneAndUpdate(
       { email: myemail },
-      { $push: { following: connection_id } },
+      { $push: { following: loggedinuser._id } },
       { new: true }
     );
 
     const folliwinguser = await User.findOneAndUpdate(
       { email: otheremail },
-      { $push: { follow: connection_id } },
+      { $push: { follow: likeduser._id } },
       { new: true }
     );
 
