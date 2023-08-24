@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 
 exports.fetchallusers = async (req, res) => {
   try {
@@ -17,13 +18,19 @@ exports.addconnection = async (req, res) => {
   try {
     console.log("printing req.body" + req.body);
 
-    const myemail = req.body.myemail;
+    const token = req.body.my_token.replace("Bearer ", "");
     const otheremail = req.body.otheremail;
 
-    console.log("printnig myemail" + myemail);
-    console.log("printing otheremail" + otheremail);
+    console.log("printnig myemail" + otheremail);
+    console.log("printing token of my " + token);
 
-    const loggedinuser = await User.findOne({ email: myemail });
+    const decode = jwt.verify(token, process.env.JWT_SECRET)
+      console.log("decode ko print kiyta hau"+ decode.email)
+
+      console.log("done");
+
+
+    const loggedinuser = await User.findOne({ email: decode.email });
     const likeduser = await User.findOne({ email: otheremail });
 
     console.log( "printing logged in user" +loggedinuser);
