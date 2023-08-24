@@ -37,7 +37,7 @@ exports.addconnection = async (req, res) => {
     console.log("printing liked user" + likeduser);
 
     const followeduser = await User.findOneAndUpdate(
-      { email: myemail },
+      { email: decode.email },
       { $push: { following: likeduser._id } },
       { new: true }
     );
