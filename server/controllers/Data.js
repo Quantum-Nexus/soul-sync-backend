@@ -31,13 +31,13 @@ exports.addconnection = async (req, res) => {
 
     const followeduser = await User.findOneAndUpdate(
       { email: myemail },
-      { $push: { following: loggedinuser._id } },
+      { $push: { following: likeduser._id } },
       { new: true }
     );
 
     const folliwinguser = await User.findOneAndUpdate(
       { email: otheremail },
-      { $push: { follow: likeduser._id } },
+      { $push: { follow: loggedinuser._id } },
       { new: true }
     );
 
