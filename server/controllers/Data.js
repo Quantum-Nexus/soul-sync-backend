@@ -15,27 +15,38 @@ exports.fetchallusers = async (req, res) => {
 
 exports.addconnection = async (req, res) => {
   try {
-    console.log("Add conntection");
-    console.log( "Printing req ka user" + req.user);
-    const id = req.user.id; //user id
-    console.log( "Printing req ka user ka id" +  id);
+    console.log("printing req.body" + req.body);
 
-    const userconnect = req.body;
-    console.log("printing req ka body" + userconnect);
-    const connection_id = userconnect._id;
-    console.log(connection_id);
+    const myemail = req.body.myemail;
+    const otheremail = req.body.otheremail;
+
+    console.log("printnig myemail" + myemail);
+    console.log("printing otheremail" + otheremail);
 
     const followeduser = await User.findOneAndUpdate(
-      { _id: id },
+      { email: myemail },
       { $push: { following: connection_id } },
       { new: true }
     );
 
     const folliwinguser = await User.findOneAndUpdate(
-      { _id: connection_id },
+      { email: otheremail },
       { $push: { follow: connection_id } },
       { new: true }
     );
+
+
+    // const followeduser = await User.findOneAndUpdate(
+    //   { _id: id },
+    //   { $push: { following: connection_id } },
+    //   { new: true }
+    // );
+
+    // const folliwinguser = await User.findOneAndUpdate(
+    //   { _id: connection_id },
+    //   { $push: { follow: connection_id } },
+    //   { new: true }
+    // );
 
     console.log("done");
     return res.json({
