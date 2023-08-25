@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 exports.updateProfile = async (req, res) => {
   try {
@@ -54,16 +55,19 @@ exports.updateProfile = async (req, res) => {
 
 exports.myprofile = async (req, res) => {
   try {
-    console.log("entered");
-    console.log(req.user.id);
+    console.log("printing req.body " + req.body.token);
+    const token = req.body.token;
+      // Verifying the JWT using the secret key stored in environment variables
+      const decode = jwt.verify(token, process.env.JWT_SECRET)
+      console.log(decode)
 
-    const user = await User.findById(req.user.id);
-    console.log(user);
+      const user = await User.findById(decode.id);
+  
     
     return res.json({
       success: true,
       message: "Profile fetched successfully",
-      user,
+      user
     });
   } catch (error) {
     console.log(error);

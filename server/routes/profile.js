@@ -6,7 +6,7 @@ const { updateProfile, myprofile } = require("../controllers/Profile");
 
 // router.put("/updateProfile", updateProfile)
 router.put("/updateProfile", auth, updateProfile)
-router.get("/myProfile",auth, myprofile)
+router.post("/myProfile", myprofile)
 
 
 
