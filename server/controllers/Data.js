@@ -3,9 +3,18 @@ const jwt = require("jsonwebtoken");
 
 exports.fetchallusers = async (req, res) => {
   try {
-    User.find()
-      .then((users) => res.json(users))
-      .catch((err) => res.json(err));
+    console.log("entered in fetching user");
+    const currentUserId = req.user.id;
+
+
+    const currentUser = await User.findById(currentUserId);
+    const followingIds = currentUser.following; // Array of user IDs already followed
+
+    // Find users whose IDs are not in the 'following' array
+    const usersNotFollowing = await User.find({ _id: { $nin: followingIds } });
+
+    res.status(200).json(usersNotFollowing);
+
   } catch (error) {
     console.log(error);
     return res.json({
@@ -24,16 +33,15 @@ exports.addconnection = async (req, res) => {
     console.log("printnig myemail" + otheremail);
     console.log("printing token of my " + token);
 
-    const decode = jwt.verify(token, process.env.JWT_SECRET)
-      console.log("decode ko print kiyta hau"+ decode.email)
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("decode ko print kiyta hau" + decode.email);
 
-      console.log("done");
-
+    console.log("done");
 
     const loggedinuser = await User.findOne({ email: decode.email });
     const likeduser = await User.findOne({ email: otheremail });
 
-    console.log( "printing logged in user" +loggedinuser);
+    console.log("printing logged in user" + loggedinuser);
     console.log("printing liked user" + likeduser);
 
     const followeduser = await User.findOneAndUpdate(
@@ -47,7 +55,6 @@ exports.addconnection = async (req, res) => {
       { $push: { follow: loggedinuser._id } },
       { new: true }
     );
-
 
     // const followeduser = await User.findOneAndUpdate(
     //   { _id: id },
@@ -69,8 +76,8 @@ exports.addconnection = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.json({
-        success: false,
-        message: "Something went wrong while following the user",
-      })
+      success: false,
+      message: "Something went wrong while following the user",
+    });
   }
 };
