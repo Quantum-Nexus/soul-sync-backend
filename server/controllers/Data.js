@@ -4,16 +4,21 @@ const jwt = require("jsonwebtoken");
 exports.fetchallusers = async (req, res) => {
   try {
     console.log("entered in fetching user");
+
     const currentUserId = req.user.id;
 
-
     const currentUser = await User.findById(currentUserId);
-    const followingIds = currentUser.following; // Array of user IDs already followed
+    const followingIds = currentUser.following;
 
-    // Find users whose IDs are not in the 'following' array
-    const usersNotFollowing = await User.find({ _id: { $nin: followingIds } });
+    const oppositeGender = currentUser.gender === 'Male' ? 'Female' : 'Male';
 
-    res.status(200).json(usersNotFollowing);
+    const usersNotFollowing = await User.find({ 
+      _id: { $nin: followingIds },
+      gender: oppositeGender
+    });
+
+    console.log("printing", usersNotFollowing);
+    return res.status(200).json(usersNotFollowing);
 
   } catch (error) {
     console.log(error);
