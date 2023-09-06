@@ -83,7 +83,13 @@ const userSchema = new mongoose.Schema(
     ],
     confessions: [
       {
-        type: String,
+        message: {
+          type: String,
+        },
+        date: {
+          type: Date,
+          default: Date.now,
+        },
       },
     ],
   },

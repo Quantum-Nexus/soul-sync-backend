@@ -2,24 +2,22 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 exports.addConfession = async (req, res) => {
+  const userId = req.user.id;
+  const confessionText = req.body.confessionText;
+
   try {
-    console.log("entered in add confession");
+    const { message } = req.body;
+    const userId = req.user.id;
+    const user = await User.findById(userId);
 
-    const currentUserId = req.user.id;
-    const message = req.body.message;
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    const folliwinguser = await User.findOneAndUpdate(
-      { _id: currentUserId },
-      { $push: { confessions: message } },
-      { new: true }
-    );
+    user.confessions.push({ message });
+    await user.save();
 
-    folliwinguser.password = undefined;
-    return res.json({
-      success: true,
-      message: "Confession added successfully",
-      data: folliwinguser,
-    });
+    res.status(201).json({ message: "Confession added successfully" });
   } catch (error) {
     console.log(error);
     return res.json({
@@ -31,19 +29,31 @@ exports.addConfession = async (req, res) => {
 
 exports.allConfessions = async (req, res) => {
   try {
-    console.log("entered in all confession");
-    const users = await User.find({}, "confessions");
+    const confessions = await User.aggregate([
+      {
+        $unwind: "$confessions",
+      },
+      {
+        $sort: { "confessions.date": -1 },
+      },
+      {
+        $group: {
+          _id: null,
+          confessions: { $push: "$confessions" },
+        },
+      },
+    ]);
 
-    const allConfessions = users.flatMap((user) => user.confessions);
-    console.log("done")
+    if (confessions.length === 0) {
+      return res.status(404).json({ message: "No confessions found" });
+    }
 
-    res.status(200).json(allConfessions);
+    res.status(200).json(confessions[0].confessions);
   } catch (error) {
     console.log(error);
     return res.json({
       success: false,
       message: "Something went wrong while fetching all conession",
     });
-
   }
 };
