@@ -81,6 +81,11 @@ const userSchema = new mongoose.Schema(
         ref: "user",
       },
     ],
+    confessions: [
+      {
+        type: String,
+      },
+    ],
   },
   { timestamps: true }
 );

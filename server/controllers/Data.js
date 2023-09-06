@@ -9,9 +9,9 @@ exports.fetchallusers = async (req, res) => {
 
     const currentUser = await User.findById(currentUserId);
     const followingIds = currentUser.following;
-
+    
     const oppositeGender = currentUser.gender === 'Male' ? 'Female' : 'Male';
-
+                              
     const usersNotFollowing = await User.find({ 
       _id: { $nin: followingIds },
       gender: oppositeGender

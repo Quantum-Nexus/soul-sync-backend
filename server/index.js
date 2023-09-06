@@ -14,6 +14,7 @@ const userRoutes = require("./routes/user")
 const fetchingData = require("./routes/data")
 const contactus = require("./routes/contact")
 const profile = require("./routes/profile")
+const confess = require("./routes/confess")
 
 
 
@@ -44,6 +45,7 @@ app.use("/api/v1/auth", userRoutes)
 app.use("/api/v1/fetch", fetchingData)
 app.use("/api/v1/", contactus)
 app.use("/api/v1/", profile)
+app.use("/api/v1", confess)
 
 // Testing the server
 app.get("/", (req, res) => {
