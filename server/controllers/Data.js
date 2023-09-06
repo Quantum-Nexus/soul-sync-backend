@@ -17,6 +17,8 @@ exports.fetchallusers = async (req, res) => {
       gender: oppositeGender
     });
 
+    shuffleArray(usersNotFollowing);
+
     console.log("printing", usersNotFollowing);
     return res.status(200).json(usersNotFollowing);
 
@@ -86,3 +88,22 @@ exports.addconnection = async (req, res) => {
     });
   }
 };
+
+
+function shuffleArray(array) {
+  let currentIndex = array.length, randomIndex, temporaryValue;
+
+  // While there remain elements to shuffle...
+  while (currentIndex !== 0) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
