@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 const database = require("./config/database")
 const { cloudinaryConnect } = require("./config/cloudinary")
 const fileUpload = require("express-fileupload")
-
+const helmet = require('helmet')
 
 
 
@@ -21,7 +21,7 @@ const confess = require("./routes/confess")
 const PORT = process.env.PORT || 4000;
 database.connect()
 
-
+app.use(helmet());
 app.use(
   fileUpload({
     useTempFiles: true,
