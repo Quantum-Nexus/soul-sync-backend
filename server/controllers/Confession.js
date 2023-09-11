@@ -2,6 +2,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 exports.addConfession = async (req, res) => {
+  console.log("entered in add confession")
   const userId = req.user.id;
   const confessionText = req.body.confessionText;
 
@@ -16,6 +17,8 @@ exports.addConfession = async (req, res) => {
 
     user.confessions.push({ message });
     await user.save();
+
+    console.log("confession added successfully ")
 
     res.status(201).json({ message: "Confession added successfully" });
   } catch (error) {
