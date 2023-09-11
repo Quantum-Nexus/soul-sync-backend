@@ -3,8 +3,6 @@ const jwt = require("jsonwebtoken");
 
 exports.addConfession = async (req, res) => {
   console.log("entered in add confession")
-  const userId = req.user.id;
-  const confessionText = req.body.confessionText;
 
   try {
     const { message } = req.body;
